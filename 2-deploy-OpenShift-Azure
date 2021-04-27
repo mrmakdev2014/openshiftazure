@@ -1,0 +1,106 @@
+Deploying OpenShift Resources to Azure
+Introduction
+
+In this hands-on lab, we will use the Azure CLI Tools to launch the Azure Resource Manager template we created to deploy all the resources needed with one fowl swoop.
+Solution
+
+Log in to the Azure Portal using the credentials provided on the lab instructions page.
+Configure Cloud Shell
+
+    If a Welcome to Microsoft Azure get started window appears, click Maybe layer.
+    On the left-hand side navigation menu, click All Resources.
+
+    Set up Cloud Shell by clicking the "Cloud Shell" icon button in the top-right hand corner of the screen:
+
+    "Azure Cloud Shell"
+
+    When prompted to choose an environment, click Bash to begin configuring the Cloud Shell.
+    On the "You have no storage mounted" window, click Show advanced settings.
+
+    Leave and use the existing subscription, resource group, and storage account.
+
+    Note: If the storage account does not populate, ensure that West US is selected for the Cloud Shell region field .
+
+    Use the same Cloud Shell region as your lab provided storage container.
+    Under Storage account, click the radio button for Use existing.
+    Under File share, choose the radio button for Create new and specify 123okd as the new file share name.
+
+    Click Create storage.
+
+    Note: Upon completion, we should a status of Cloud Shell.Succeeded.
+
+Download SSH Keys for the Lab
+
+    We will need to pull down the SSH keys to connect to the VMs using SSH. First, make the .ssh directory if it isn't already there with:
+
+    mkdir .ssh
+
+    Then cd into the directory with:
+
+    cd .ssh
+
+    Now, use wget to pull down the SSH keys using these links:
+
+    wget https://raw.githubusercontent.com/linuxacademy/content-openshift-origin-azure/master/ssh/id_rsa
+    wget https://raw.githubusercontent.com/linuxacademy/content-openshift-origin-azure/master/ssh/id_rsa.pub
+
+    Change the permission to the files to 600 with:
+
+    chmod 600 id_rsa*
+
+    Verify the permission changes set with:
+
+    ls -la
+
+    Note: The reset SSH public key task can either be performed before or after the deployment of OpenShift resources task.
+
+Deploy OpenShift Resources
+
+    Use cd to go back to our main directory.
+
+    Retrieve the resource group name:
+
+    az group list
+
+    Copy the resource group name that appears:
+
+    deploying_openshift_resources3803451.9880911690.date.2019092416163290
+
+    Run the following command to deploy the resources for the OpenShift installation using an ARM template from the labs Git repo. The URL to use is:
+
+    https://raw.githubusercontent.com/linuxacademy/content-openshift-origin-azure/master/ccDeploy.json
+
+    It should look like this:
+
+    az group deployment create -g deploying_openshift_resources3803451.9880911690.date.2019092416163290 --name ZLandCluster --template-uri https://raw.githubusercontent.com/linuxacademy/content-openshift-origin-azure/master/ccDeploy.json
+
+    Note: It should show as Running and may take a couple of minutes to successfully complete. We should not see any red error messages. To watch the creation we can also click on the All Resources section in the left-hand side navigation menu, and click Refresh to view the progress.
+    Reset SSH Public Key
+
+    Navigate back to the bastionVM-0 in the All resources section.
+    Scroll down and underneath the Support + troubleshooting** section, click Reset password.
+    Ensure that the radio button for Reset SSH public key is selected.
+    For the Username field, type azureuser.
+
+    Run the following command:
+
+    vim .ssh/id_rsa.pub
+
+    Copy the contents of the public key file, and then paste it into the SSH public key textbox.
+
+    Click Update.
+
+    Note: We may need to click Update twice.
+
+    Click the "bell" icon button to view the Notifications section.
+    Once we see a "Successfully reset SSH key" message, close out of the Reset password section with the X.
+    Close out of the public key file.
+    Under the All resources section, navigate back to bastionVM-0, and then on the Overview section, click Connect.
+    In the Connect to virtual machine window, click the copy/paste icon button for the Login using VM local account section.
+    Paste and run the command in the terminal to connect to the bastion host using SSH. It should look similar to this:
+
+    ssh azureuser@40.124.9.211
+
+    Type y for yes when asked to continue connecting.
+
+Conclusion
