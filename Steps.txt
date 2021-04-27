@@ -1,0 +1,5 @@
+1- Create Resouce group 
+2- Create keyVault 
+az keyvault create --resource-group sandbox --name keyvalutODK --enabled-for-template-deployment true
+
+
