@@ -2,4 +2,4 @@
 2- Create keyVault 
 az keyvault create --resource-group sandbox --name keyvalutODK --enabled-for-template-deployment true
 
-
+yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
